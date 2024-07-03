@@ -1,0 +1,6 @@
+.venv
+original_video.mov
+original_video_no_audio.mp4
+__pycache__
+runs/pose/*
+.DS_Store
