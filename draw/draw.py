@@ -37,28 +37,12 @@ class Draw():
         return masked_overlay
 
     def draw_donald_duck_face(self, frames, detections, masked_overlay):
+        self.frame_num = 0
         output_frames = []
 
         # Loop through frames and detections
         for frame, detection in zip(frames, detections):
             nose = detection['nose']
-            left_shoulder = detection['left_shoulder']
-            right_shoulder = detection['right_shoulder']
-            left_elbow = detection['left_elbow']
-            right_elbow = detection['right_elbow']
-            left_wrist = detection['left_wrist']
-            right_wrist = detection['right_wrist']
-            left_hip = detection['left_hip']
-            right_hip = detection['right_hip']
-            left_knee = detection['left_knee']
-            right_knee = detection['right_knee']
-            left_ankle = detection['left_ankle']
-            right_ankle = detection['right_ankle']
-
-            left_body_parts = [left_shoulder, left_elbow,
-                               left_wrist, left_hip, left_knee, left_ankle]
-            right_body_parts = [right_shoulder, right_elbow,
-                                right_wrist, right_hip, right_knee, right_ankle]
 
             # If nose is visible
             if np.any(nose):
@@ -73,6 +57,49 @@ class Draw():
                             alpha = masked_overlay[y, x, 3] / 255.0
                             frame[y + y_offset, x + x_offset] = alpha * masked_overlay[y,
                                                                                        x, :3] + (1 - alpha) * frame[y + y_offset, x + x_offset]
+
+            output_frames.append(frame)
+            self.frame_num += 1
+
+        return output_frames
+
+    def draw_wireframe(self, frames, detections):
+        self.frame_num = 0
+        output_frames = []
+
+        # Loop through frames and detections
+        for frame, detection in zip(frames, detections):
+            nose = detection['nose']
+            left_eye = detection['left_eye']
+            right_eye = detection['right_eye']
+            left_ear = detection['left_ear']
+            right_ear = detection['right_ear']
+            left_shoulder = detection['left_shoulder']
+            right_shoulder = detection['right_shoulder']
+            left_elbow = detection['left_elbow']
+            right_elbow = detection['right_elbow']
+            left_wrist = detection['left_wrist']
+            right_wrist = detection['right_wrist']
+            left_hip = detection['left_hip']
+            right_hip = detection['right_hip']
+            left_knee = detection['left_knee']
+            right_knee = detection['right_knee']
+            left_ankle = detection['left_ankle']
+            right_ankle = detection['right_ankle']
+
+            head = [nose, left_eye, right_eye, left_ear, right_ear]
+
+            left_body_parts = [left_shoulder, left_elbow,
+                               left_wrist, left_hip, left_knee, left_ankle]
+            right_body_parts = [right_shoulder, right_elbow,
+                                right_wrist, right_hip, right_knee, right_ankle]
+
+            # Draw circles around head
+            for body_part in head:
+                if np.any(body_part):
+                    # Draw a circle around body parts
+                    cv2.circle(frame, (int(body_part[0]), int(body_part[1])),
+                               5, (200, 100, 100), -1)
 
             # Draw circles around left body parts
             for body_part in left_body_parts:
@@ -89,6 +116,22 @@ class Draw():
                                5, (0, 255, 0), -1)
 
             # Draw lines between body parts
+            if np.any(left_ear) and np.any(left_eye):
+                cv2.line(frame, (int(left_ear[0]), int(left_ear[1])),
+                         (int(left_eye[0]), int(left_eye[1])), (100, 50, 50), 2)
+
+            if np.any(left_eye) and np.any(nose):
+                cv2.line(frame, (int(left_eye[0]), int(left_eye[1])),
+                         (int(nose[0]), int(nose[1])), (200, 100, 100), 2)
+
+            if np.any(nose) and np.any(right_eye):
+                cv2.line(frame, (int(nose[0]), int(nose[1])),
+                         (int(right_eye[0]), int(right_eye[1])), (200, 100, 100), 2)
+
+            if np.any(right_eye) and np.any(right_ear):
+                cv2.line(frame, (int(right_eye[0]), int(right_eye[1])),
+                         (int(right_ear[0]), int(right_ear[1]),), (200, 100, 100), 2)
+
             if np.any(left_shoulder) and np.any(right_shoulder):
                 cv2.line(frame, (int(left_shoulder[0]), int(left_shoulder[1])),
                          (int(right_shoulder[0]), int(right_shoulder[1]),), (200, 200, 200), 2)
@@ -141,3 +184,12 @@ class Draw():
             self.frame_num += 1
 
         return output_frames
+
+    def create_blank_frames(self, frames):
+        blank_frames = []
+
+        for frame in frames:
+            blank_frame = np.zeros_like(frame)
+            blank_frames.append(blank_frame)
+
+        return blank_frames

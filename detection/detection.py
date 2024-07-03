@@ -26,6 +26,10 @@ class Detection():
 
             # Assign keypoints to variables
             nose = keypoints[self.get_keypoint.NOSE]
+            left_eye = keypoints[self.get_keypoint.LEFT_EYE]
+            right_eye = keypoints[self.get_keypoint.RIGHT_EYE]
+            left_ear = keypoints[self.get_keypoint.LEFT_EAR]
+            right_ear = keypoints[self.get_keypoint.RIGHT_EAR]
             left_shoulder = keypoints[self.get_keypoint.LEFT_SHOULDER]
             right_shoulder = keypoints[self.get_keypoint.RIGHT_SHOULDER]
             left_elbow = keypoints[self.get_keypoint.LEFT_ELBOW]
@@ -42,6 +46,10 @@ class Detection():
             # Create dictionary
             keypoints_dict = {
                 'nose': nose,
+                'left_eye': left_eye,
+                'right_eye': right_eye,
+                'left_ear': left_ear,
+                'right_ear': right_ear,
                 'left_shoulder': left_shoulder,
                 'right_shoulder': right_shoulder,
                 'left_elbow': left_elbow,

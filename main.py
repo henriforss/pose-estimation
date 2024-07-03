@@ -15,11 +15,17 @@ detections = detection.detect(
 interpolated_detections = detection.interpolate(detections)
 
 # Draw on frame
+wireframe = True
 draw = Draw()
-masked_overlay = draw.create_masked_overlay('data/images/donald_duck.jpg')
-output_frames = draw.draw_donald_duck_face(
-    frames, interpolated_detections, masked_overlay)
 
+if wireframe:
+    blank_frames = draw.create_blank_frames(frames)
+    output_frames = draw.draw_wireframe(blank_frames, interpolated_detections)
+else:
+    output_frames = draw.draw_wireframe(frames, interpolated_detections)
+    masked_overlay = draw.create_masked_overlay('data/images/donald_duck.jpg')
+    output_frames = draw.draw_donald_duck_face(
+        output_frames, interpolated_detections, masked_overlay)
 
 # Save video
-save_video(output_frames, 'output/output_video.mp4')
+save_video(output_frames, 'output/output_video_wireframe.mp4')
