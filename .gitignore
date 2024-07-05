@@ -1,7 +1,11 @@
-.venv
-__pycache__
-runs
 .DS_Store
-output
+__pycache__
+
+.venv
+comfy_images
 data
 models
+output
+runs
+stubs
+comfy_images
